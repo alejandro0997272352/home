@@ -1,0 +1,9 @@
+.Para_Mamá
+position: absolute;
+width: 90%;
+font-size: 2rem;
+font-family: "TE AMO";
+height: var(--letter-love);
+transform: translateX(-58%);
+background: var(--letter);
+}
