@@ -10,14 +10,14 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
-    && docker-php-ext-install pdo_pgsql mbstring xml bcmath gd
+    && docker-php-ext-install pdo_pgsql mbstring xml bcmath gd zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY tutorias/ /var/www/html
 WORKDIR /var/www/html
 
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --optimize-autoloader --no-dev --ignore-platform-req=ext-gd --ignore-platform-req=ext-zip
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
