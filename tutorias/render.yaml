@@ -1,12 +1,11 @@
 services:
   - type: web
     name: tutorias
-    runtime: php
+    runtime: docker
     region: oregon
     plan: free
-    buildCommand: composer install --optimize-autoloader --no-dev
-    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
-    healthCheckPath: /
+    dockerfilePath: /tutorias/Dockerfile
+    healthCheckPath: /health
     envVars:
       - key: APP_ENV
         value: production
