@@ -15,7 +15,6 @@ if [ -z "$APP_KEY" ] || [ "$APP_KEY" = "SomeRandomString" ]; then
 fi
 
 php artisan config:cache
-php artisan view:clear
 php artisan migrate --force
 
 php-fpm -D
