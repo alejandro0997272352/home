@@ -23,8 +23,12 @@ class DashboardController extends Controller
         $citasConfirmadas = Appointment::where('estado', 'confirmada')->count();
         $citasHoy = Appointment::whereDate('fecha', today())->count();
 
+        $driver = DB::getDriverName();
+        $rawMonth = $driver === 'pgsql' ? "EXTRACT(MONTH FROM created_at)" : "MONTH(created_at)";
+        $rawDate = $driver === 'pgsql' ? "fecha::date" : "DATE(fecha)";
+
         $citasPorMes = Appointment::select(
-            DB::raw('MONTH(created_at) as mes'),
+            DB::raw("{$rawMonth} as mes"),
             DB::raw('COUNT(*) as total')
         )
             ->whereYear('created_at', now()->year)
@@ -46,7 +50,7 @@ class DashboardController extends Controller
             ->get();
 
         $citasPorDia = Appointment::select(
-            DB::raw('DATE(fecha) as dia'),
+            DB::raw("{$rawDate} as dia"),
             DB::raw('COUNT(*) as total')
         )
             ->whereDate('fecha', '>=', now()->subDays(14))

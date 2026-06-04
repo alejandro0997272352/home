@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('availability', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->enum('dia_semana', ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']);
+            $table->string('dia_semana', 20);
             $table->time('hora_inicio');
             $table->time('hora_fin');
             $table->boolean('activo')->default(true);

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->time('hora_fin');
             $table->text('notas')->nullable();
             $table->text('notas_tutor')->nullable();
-            $table->enum('estado', ['pendiente', 'confirmada', 'completada', 'cancelada'])->default('pendiente');
+            $table->string('estado', 20)->default('pendiente');
             $table->string('modalidad', 20)->default('presencial');
             $table->string('ubicacion', 200)->nullable();
             $table->string('motivo_cancelacion')->nullable();

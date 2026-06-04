@@ -28,8 +28,11 @@ class DashboardController extends Controller
 
         $materias = $user->subjects;
 
+        $driver = DB::getDriverName();
+        $rawMonth = $driver === 'pgsql' ? "EXTRACT(MONTH FROM fecha)" : "MONTH(fecha)";
+
         $citasPorMes = Appointment::select(
-            DB::raw('MONTH(fecha) as mes'),
+            DB::raw("{$rawMonth} as mes"),
             DB::raw('COUNT(*) as total')
         )
             ->byTutor($user->id)
