@@ -43,6 +43,8 @@ Route::get('/admin/db', function () {
     return view('db-viewer', compact('data'));
 })->middleware(['auth', \App\Http\Middleware\CheckRole::class . ':admin'])->name('admin.db');
 
+Route::get('/health', fn () => response()->json(['status' => 'ok']))->name('health');
+
 Route::get('/', function () {
     if (auth()->check()) {
         $role = auth()->user()->role;
