@@ -14,8 +14,8 @@ if [ -z "$APP_KEY" ] || [ "$APP_KEY" = "SomeRandomString" ]; then
     php artisan key:generate --force
 fi
 
-php artisan config:clear
-php artisan view:cache
+php artisan config:cache
+php artisan view:clear
 php artisan migrate --force
 
 php-fpm -D
