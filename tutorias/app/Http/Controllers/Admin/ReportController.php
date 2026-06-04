@@ -75,8 +75,22 @@ class ReportController extends Controller
             'confirmadas' => $citas->where('estado', 'confirmada')->count(),
         ];
 
+        $citasPorTutor = $citas->groupBy('tutor_id')->map(function ($group) {
+            return (object) [
+                'tutor' => $group->first()->tutor,
+                'total' => $group->count(),
+            ];
+        })->values();
+
+        $citasPorMateria = $citas->groupBy('subject_id')->map(function ($group) {
+            return (object) [
+                'subject' => $group->first()->subject,
+                'total' => $group->count(),
+            ];
+        })->values();
+
         $pdf = Pdf::loadView('admin.reportes.pdf', compact(
-            'citas', 'resumen', 'startDate', 'endDate'
+            'citas', 'resumen', 'startDate', 'endDate', 'citasPorTutor', 'citasPorMateria'
         ));
 
         return $pdf->download("reporte-tutorias-{$startDate}-{$endDate}.pdf");
