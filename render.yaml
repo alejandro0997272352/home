@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: tutorias
+    runtime: docker
+    region: oregon
+    plan: free
+    dockerfilePath: /Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tutorias-db
+          property: connectionString
+      - key: APP_URL
+        value: https://tutorias.onrender.com
+      - key: SESSION_DRIVER
+        value: file
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: DB_SSLMODE
+        value: require
+
+databases:
+  - name: tutorias-db
+    databaseName: tutorias
+    plan: free
+    region: oregon
+    postgresMajorVersion: 16

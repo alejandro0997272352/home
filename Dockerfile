@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY . /var/www/html
+COPY tutorias/ /var/www/html
 WORKDIR /var/www/html
 
 RUN composer install --optimize-autoloader --no-dev
