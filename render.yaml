@@ -1,10 +1,11 @@
 services:
   - type: web
     name: tutorias
-    runtime: docker
+    runtime: php
+    rootDir: tutorias
     region: oregon
     plan: free
-    dockerfilePath: /Dockerfile
+    buildCommand: composer install --optimize-autoloader --no-dev
     healthCheckPath: /health
     envVars:
       - key: APP_ENV
