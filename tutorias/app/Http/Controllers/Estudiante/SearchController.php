@@ -50,14 +50,18 @@ class SearchController extends Controller
             $q->where('activo', true)->orderByRaw("FIELD(dia_semana, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado')");
         }]);
 
-        $reviews = Review::whereHas('appointment', function ($q) use ($user) {
+        $reviews = Review::where('aprobado', true)->whereHas('appointment', function ($q) use ($user) {
             $q->where('tutor_id', $user->id)->where('estado', 'completada');
         })->with('user')->latest()->get();
+
+        $allReviews = Review::whereHas('appointment', function ($q) use ($user) {
+            $q->where('tutor_id', $user->id)->where('estado', 'completada');
+        })->count();
 
         $stats = [
             'total_sesiones' => $user->tutorProfile?->total_sesiones ?? 0,
             'calificacion_promedio' => $user->tutorProfile?->calificacion_promedio ?? 0,
-            'total_reviews' => $reviews->count(),
+            'total_reviews' => $allReviews,
             'materias_count' => $user->subjects->count(),
         ];
 

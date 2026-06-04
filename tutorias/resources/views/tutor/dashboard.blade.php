@@ -10,13 +10,14 @@
     <p class="text-gray-600 dark:text-gray-400">Bienvenido, {{ auth()->user()->name }}</p>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
     @php
         $cards = [
             ['label' => 'Total Citas', 'value' => $totalCitas, 'color' => 'blue', 'icon' => 'fa-calendar'],
             ['label' => 'Completadas', 'value' => $citasCompletadas, 'color' => 'green', 'icon' => 'fa-check-circle'],
             ['label' => 'Pendientes', 'value' => $citasPendientes, 'color' => 'orange', 'icon' => 'fa-clock'],
             ['label' => 'Hoy', 'value' => $citasHoy, 'color' => 'indigo', 'icon' => 'fa-calendar-day'],
+            ['label' => 'Horas Impartidas', 'value' => number_format($horasTotales, 1), 'color' => 'purple', 'icon' => 'fa-clock'],
         ];
     @endphp
     @foreach($cards as $i => $card)
@@ -36,25 +37,36 @@
     @endforeach
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-5">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+            <i class="fas fa-chart-bar mr-2 text-blue-600"></i>Citas por Mes
+        </h2>
+        <canvas id="chartMes" height="180"></canvas>
+    </div>
+    <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-6">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+            <i class="fas fa-chart-pie mr-2 text-blue-600"></i>Por Estado
+        </h2>
+        <canvas id="chartEstado" height="180"></canvas>
+    </div>
+    <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-7">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
             <i class="fas fa-clock mr-2 text-blue-600"></i>Próximas Citas
         </h2>
         @if($proximasCitas->isNotEmpty())
-            <div class="space-y-3">
+            <div class="space-y-2">
                 @foreach($proximasCitas as $cita)
-                    <div class="border border-gray-100 dark:border-gray-700 rounded-xl p-4 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-200 hover:shadow-sm">
+                    <div class="border border-gray-100 dark:border-gray-700 rounded-xl p-3 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-all duration-200">
                         <div class="flex justify-between items-start">
-                            <div>
-                                <p class="font-semibold text-gray-900 dark:text-gray-100">{{ $cita->student->name }}</p>
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5">{{ $cita->subject->nombre }}</p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            <div class="min-w-0">
+                                <p class="font-semibold text-gray-900 dark:text-gray-100 text-sm truncate">{{ $cita->student->name }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                                     <i class="far fa-calendar mr-1"></i>{{ $cita->fecha->format('d/m/Y') }}
-                                    <i class="far fa-clock ml-3 mr-1"></i>{{ substr($cita->hora_inicio, 0, 5) }} - {{ substr($cita->hora_fin, 0, 5) }}
+                                    <i class="far fa-clock ml-2 mr-1"></i>{{ substr($cita->hora_inicio, 0, 5) }}
                                 </p>
                             </div>
-                            <span class="px-2.5 py-1 text-xs rounded-full font-medium
+                            <span class="px-2 py-0.5 text-xs rounded-full font-medium flex-shrink-0
                                 @if($cita->estado === 'pendiente') bg-yellow-100 text-yellow-800 badge-pulse
                                 @else bg-blue-100 text-blue-800 @endif">
                                 {{ ucfirst($cita->estado) }}
@@ -64,11 +76,13 @@
                 @endforeach
             </div>
         @else
-            <div class="text-center py-8 text-gray-500 dark:text-gray-400"><i class="fas fa-calendar-check text-4xl text-gray-300 dark:text-gray-500 mb-3"></i><p>No tienes citas próximas</p></div>
+            <div class="text-center py-6 text-gray-500 dark:text-gray-400 text-sm">Sin citas próximas</div>
         @endif
     </div>
+</div>
 
-    <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-6">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-8">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
             <i class="fas fa-book mr-2 text-blue-600"></i>Mis Materias
         </h2>
@@ -79,23 +93,84 @@
                 @endforeach
             </div>
         @else
-            <p class="text-gray-500 dark:text-gray-400 text-center py-8">No tienes materias asignadas</p>
+            <p class="text-gray-500 dark:text-gray-400 text-center py-6">No tienes materias asignadas</p>
         @endif
-        <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
-            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Citas del Mes</h3>
-            <div class="space-y-2">
-                @php $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']; @endphp
-                @foreach($citasPorMes as $item)
-                    <div class="flex justify-between text-sm p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-all">
-                        <span class="text-gray-700 dark:text-gray-300">{{ $meses[$item->mes - 1] }}</span>
-                        <span class="font-semibold text-blue-600">{{ $item->total }}</span>
-                    </div>
-                @endforeach
-                @if($citasPorMes->isEmpty())
-                    <p class="text-gray-500 dark:text-gray-400 text-center py-4">Sin datos</p>
-                @endif
+    </div>
+    <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-9">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+            <i class="fas fa-chart-line mr-2 text-blue-600"></i>Resumen
+        </h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 text-center">
+                <p class="text-2xl font-bold text-green-600">{{ $citasCompletadas }}</p>
+                <p class="text-xs text-gray-600 dark:text-gray-400">Completadas</p>
+            </div>
+            <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-4 text-center">
+                <p class="text-2xl font-bold text-yellow-600">{{ $citasPendientes }}</p>
+                <p class="text-xs text-gray-600 dark:text-gray-400">Pendientes</p>
+            </div>
+            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 text-center">
+                <p class="text-2xl font-bold text-blue-600">{{ $citasConfirmadas }}</p>
+                <p class="text-xs text-gray-600 dark:text-gray-400">Confirmadas</p>
+            </div>
+            <div class="bg-red-50 dark:bg-red-900/20 rounded-xl p-4 text-center">
+                <p class="text-2xl font-bold text-red-600">{{ $citasCanceladas }}</p>
+                <p class="text-xs text-gray-600 dark:text-gray-400">Canceladas</p>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    new Chart(document.getElementById('chartMes'), {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($citasPorMes->map(fn($i) => \Carbon\Carbon::create()->month($i->mes)->translatedFormat('M'))) !!},
+            datasets: [{
+                label: 'Citas',
+                data: {!! json_encode($citasPorMes->pluck('total')) !!},
+                backgroundColor: 'rgba(59,130,246,0.5)',
+                borderColor: '#3b82f6',
+                borderWidth: 1,
+                borderRadius: 4,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+    });
+
+    new Chart(document.getElementById('chartEstado'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Pendientes', 'Confirmadas', 'Completadas', 'Canceladas'],
+            datasets: [{
+                data: [
+                    {{ $estados['pendiente'] ?? 0 }},
+                    {{ $estados['confirmada'] ?? 0 }},
+                    {{ $estados['completada'] ?? 0 }},
+                    {{ $estados['cancelada'] ?? 0 }}
+                ],
+                backgroundColor: ['#eab308', '#3b82f6', '#22c55e', '#ef4444'],
+                borderWidth: 0,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { padding: 12, usePointStyle: true, pointStyle: 'circle' }
+                }
+            }
+        }
+    });
+});
+</script>
+@endpush

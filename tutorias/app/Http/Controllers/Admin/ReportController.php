@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Models\Subject;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -15,11 +16,20 @@ class ReportController extends Controller
     {
         $startDate = $request->get('fecha_inicio', now()->startOfMonth()->toDateString());
         $endDate = $request->get('fecha_fin', now()->endOfMonth()->toDateString());
+        $tutorId = $request->get('tutor_id');
+        $subjectId = $request->get('subject_id');
 
-        $citas = Appointment::with(['tutor', 'student', 'subject'])
-            ->fechaBetween($startDate, $endDate)
-            ->orderBy('fecha', 'desc')
-            ->get();
+        $query = Appointment::with(['tutor', 'student', 'subject'])
+            ->fechaBetween($startDate, $endDate);
+
+        if ($tutorId) {
+            $query->where('tutor_id', $tutorId);
+        }
+        if ($subjectId) {
+            $query->where('subject_id', $subjectId);
+        }
+
+        $citas = $query->orderBy('fecha', 'desc')->get();
 
         $resumen = [
             'total' => $citas->count(),
@@ -29,21 +39,12 @@ class ReportController extends Controller
             'confirmadas' => $citas->where('estado', 'confirmada')->count(),
         ];
 
-        $citasPorTutor = Appointment::select('tutor_id', DB::raw('count(*) as total'))
-            ->fechaBetween($startDate, $endDate)
-            ->groupBy('tutor_id')
-            ->with('tutor')
-            ->get();
-
-        $citasPorMateria = Appointment::select('subject_id', DB::raw('count(*) as total'))
-            ->fechaBetween($startDate, $endDate)
-            ->groupBy('subject_id')
-            ->with('subject')
-            ->get();
+        $tutores = User::where('role', 'tutor')->orderBy('name')->get();
+        $materias = Subject::orderBy('nombre')->get();
 
         return view('admin.reportes.index', compact(
-            'citas', 'resumen', 'citasPorTutor', 'citasPorMateria',
-            'startDate', 'endDate'
+            'citas', 'resumen', 'startDate', 'endDate',
+            'tutores', 'materias', 'tutorId', 'subjectId'
         ));
     }
 
@@ -51,11 +52,20 @@ class ReportController extends Controller
     {
         $startDate = $request->get('fecha_inicio', now()->startOfMonth()->toDateString());
         $endDate = $request->get('fecha_fin', now()->endOfMonth()->toDateString());
+        $tutorId = $request->get('tutor_id');
+        $subjectId = $request->get('subject_id');
 
-        $citas = Appointment::with(['tutor', 'student', 'subject'])
-            ->fechaBetween($startDate, $endDate)
-            ->orderBy('fecha', 'desc')
-            ->get();
+        $query = Appointment::with(['tutor', 'student', 'subject'])
+            ->fechaBetween($startDate, $endDate);
+
+        if ($tutorId) {
+            $query->where('tutor_id', $tutorId);
+        }
+        if ($subjectId) {
+            $query->where('subject_id', $subjectId);
+        }
+
+        $citas = $query->orderBy('fecha', 'desc')->get();
 
         $resumen = [
             'total' => $citas->count(),
@@ -65,21 +75,8 @@ class ReportController extends Controller
             'confirmadas' => $citas->where('estado', 'confirmada')->count(),
         ];
 
-        $citasPorTutor = Appointment::select('tutor_id', DB::raw('count(*) as total'))
-            ->fechaBetween($startDate, $endDate)
-            ->groupBy('tutor_id')
-            ->with('tutor')
-            ->get();
-
-        $citasPorMateria = Appointment::select('subject_id', DB::raw('count(*) as total'))
-            ->fechaBetween($startDate, $endDate)
-            ->groupBy('subject_id')
-            ->with('subject')
-            ->get();
-
         $pdf = Pdf::loadView('admin.reportes.pdf', compact(
-            'citas', 'resumen', 'citasPorTutor', 'citasPorMateria',
-            'startDate', 'endDate'
+            'citas', 'resumen', 'startDate', 'endDate'
         ));
 
         return $pdf->download("reporte-tutorias-{$startDate}-{$endDate}.pdf");

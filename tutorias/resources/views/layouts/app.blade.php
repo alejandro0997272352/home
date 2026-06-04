@@ -117,6 +117,9 @@
                                 <a href="{{ route('admin.db') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.db') ? 'text-white bg-indigo-600 shadow-md' : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30' }}">
                                     <i class="fas fa-database mr-1"></i>BD
                                 </a>
+                                <a href="{{ route('admin.reviews.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('admin.reviews.*') ? 'text-white bg-indigo-600 shadow-md' : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30' }}">
+                                    <i class="fas fa-star mr-1"></i>Reviews
+                                </a>
                             @elseif ($role === 'tutor')
                                 <a href="{{ route('tutor.dashboard') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('tutor.dashboard') ? 'text-white bg-indigo-600 shadow-md' : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30' }}">
                                     <i class="fas fa-chart-pie mr-1"></i>Dashboard
@@ -126,6 +129,9 @@
                                 </a>
                                 <a href="{{ route('tutor.citas') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('tutor.citas') ? 'text-white bg-indigo-600 shadow-md' : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30' }}">
                                     <i class="fas fa-calendar-check mr-1"></i>Mis Citas
+                                </a>
+                                <a href="{{ route('chat.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('chat.*') ? 'text-white bg-indigo-600 shadow-md' : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30' }}">
+                                    <i class="fas fa-comments mr-1"></i>Mensajes
                                 </a>
                             @else
                                 <a href="{{ route('estudiante.dashboard') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('estudiante.dashboard') ? 'text-white bg-indigo-600 shadow-md' : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30' }}">
@@ -137,14 +143,37 @@
                                 <a href="{{ route('estudiante.citas') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('estudiante.citas') ? 'text-white bg-indigo-600 shadow-md' : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30' }}">
                                     <i class="fas fa-calendar-check mr-1"></i>Mis Citas
                                 </a>
+                                <a href="{{ route('chat.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 {{ request()->routeIs('chat.*') ? 'text-white bg-indigo-600 shadow-md' : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30' }}">
+                                    <i class="fas fa-comments mr-1"></i>Mensajes
+                                </a>
                             @endif
                         </div>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <button onclick="toggleDarkMode()" class="p-2 text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 rounded-lg transition-all hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <button onclick="toggleDarkMode()" class="p-2 text-gray-600 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 rounded-lg transition-all hover:bg-gray-100 dark:hover:bg-gray-700" title="{{ __('messages.dark_mode') }}">
                             <i class="fas fa-moon dark:hidden"></i>
                             <i class="fas fa-sun hidden dark:inline"></i>
                         </button>
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="p-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg transition-all hover:bg-gray-100 dark:hover:bg-gray-700" title="{{ __('messages.language') }}">
+                                <i class="fas fa-globe text-lg"></i>
+                            </button>
+                            <div x-show="open" @click.outside="open = false"
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-150"
+                                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+                                class="absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
+                                <a href="{{ route('locale.switch', 'es') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors {{ app()->getLocale() === 'es' ? 'font-bold text-indigo-600' : '' }}">
+                                    <span class="text-base">🇪🇸</span> {{ __('messages.spanish') }}
+                                </a>
+                                <a href="{{ route('locale.switch', 'en') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors {{ app()->getLocale() === 'en' ? 'font-bold text-indigo-600' : '' }}">
+                                    <span class="text-base">🇺🇸</span> {{ __('messages.english') }}
+                                </a>
+                            </div>
+                        </div>
                         <div class="relative" x-data="{ open: false, count: 0, notifs: [], shake: false }"
                              @notify-update.window="if ($event.detail.count > count) { shake = true; setTimeout(() => shake = false, 500); } count = $event.detail.count; notifs = $event.detail.notificaciones">
                             <button @click="open = !open; if(open && notifs.length === 0) fetchNotifs()" class="relative p-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg transition-all hover:bg-gray-100 dark:hover:bg-gray-700" :class="{ 'animate-shake': shake }">

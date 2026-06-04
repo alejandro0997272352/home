@@ -41,9 +41,24 @@ class DashboardController extends Controller
             ->orderBy('mes')
             ->get();
 
+        $estados = Appointment::select('estado', DB::raw('COUNT(*) as total'))
+            ->byTutor($user->id)
+            ->groupBy('estado')
+            ->pluck('total', 'estado');
+
+        $citasCanceladas = $user->tutorAppointments()->where('estado', 'cancelada')->count();
+        $citasConfirmadas = $user->tutorAppointments()->where('estado', 'confirmada')->count();
+        $horasTotales = $user->tutorAppointments()
+            ->where('estado', 'completada')
+            ->get()
+            ->sum(fn($c) => $c->hora_inicio && $c->hora_fin
+                ? abs(strtotime($c->hora_fin) - strtotime($c->hora_inicio)) / 3600
+                : 0);
+
         return view('tutor.dashboard', compact(
             'proximasCitas', 'totalCitas', 'citasCompletadas',
-            'citasPendientes', 'citasHoy', 'materias', 'citasPorMes'
+            'citasPendientes', 'citasHoy', 'materias', 'citasPorMes',
+            'estados', 'citasCanceladas', 'citasConfirmadas', 'horasTotales'
         ));
     }
 }

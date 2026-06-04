@@ -20,7 +20,7 @@
                         </div>
                     @endif
                 </div>
-                <div>
+                <div class="flex-1">
                     <h1 class="text-3xl font-bold">{{ $user->name }}</h1>
                     <p class="text-indigo-200 mt-1">
                         <i class="fas fa-chalkboard-teacher mr-1"></i> Tutor
@@ -30,6 +30,13 @@
                         <span class="ml-3"><i class="fas fa-session mr-1"></i> {{ $stats['total_sesiones'] }} sesiones</span>
                     </p>
                 </div>
+                <form method="POST" action="{{ route('chat.start', $user) }}">
+                    @csrf
+                    <button type="submit" class="btn-ripple px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all backdrop-blur-sm border border-white/20 flex items-center gap-2">
+                        <i class="fas fa-comment"></i>
+                        <span class="hidden sm:inline">Mensaje</span>
+                    </button>
+                </form>
             </div>
         </div>
 

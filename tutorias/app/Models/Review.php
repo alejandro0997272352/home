@@ -14,10 +14,15 @@ class Review extends Model
         'user_id',
         'calificacion',
         'comentario',
+        'aprobado',
+        'moderated_at',
+        'moderated_by',
     ];
 
     protected $casts = [
         'calificacion' => 'integer',
+        'aprobado' => 'boolean',
+        'moderated_at' => 'datetime',
     ];
 
     public function appointment()

@@ -22,11 +22,32 @@
             <input type="date" name="fecha_fin" value="{{ $endDate }}"
                 class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all">
         </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tutor</label>
+            <select name="tutor_id" class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all">
+                <option value="">Todos los tutores</option>
+                @foreach($tutores as $tutor)
+                    <option value="{{ $tutor->id }}" {{ $tutorId == $tutor->id ? 'selected' : '' }}>{{ $tutor->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Materia</label>
+            <select name="subject_id" class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all">
+                <option value="">Todas las materias</option>
+                @foreach($materias as $materia)
+                    <option value="{{ $materia->id }}" {{ $subjectId == $materia->id ? 'selected' : '' }}>{{ $materia->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
         <button type="submit" class="btn-ripple px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md">
             <i class="fas fa-filter mr-1"></i> Filtrar
         </button>
-        <a href="{{ route('admin.reportes.pdf', ['fecha_inicio' => $startDate, 'fecha_fin' => $endDate]) }}" class="btn-ripple px-4 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl hover:from-red-700 hover:to-rose-700 transition-all shadow-md">
+        <a href="{{ route('admin.reportes.pdf', ['fecha_inicio' => $startDate, 'fecha_fin' => $endDate, 'tutor_id' => $tutorId, 'subject_id' => $subjectId]) }}" class="btn-ripple px-4 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl hover:from-red-700 hover:to-rose-700 transition-all shadow-md">
             <i class="fas fa-file-pdf mr-1"></i> PDF
+        </a>
+        <a href="{{ route('admin.reportes') }}" class="btn-ripple px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-all">
+            <i class="fas fa-undo mr-1"></i> Limpiar
         </a>
     </form>
 </div>
@@ -49,19 +70,21 @@
     @endforeach
 </div>
 
+@if($tutorId || $subjectId || $citas->isNotEmpty())
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <div class="card-hover glass-card rounded-xl shadow-md p-6">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
             <i class="fas fa-chalkboard-teacher mr-2 text-indigo-600"></i>Citas por Tutor
         </h2>
         <div class="space-y-2">
-            @foreach($citasPorTutor as $item)
+            @foreach($citas->groupBy('tutor_id') as $tutorId => $citasTutor)
+                @php $tutor = $citasTutor->first()->tutor; @endphp
                 <div class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 dark:bg-gray-800/50 rounded-xl transition-all">
-                    <span class="font-medium text-gray-800 dark:text-gray-200">{{ $item->tutor->name ?? 'N/A' }}</span>
-                    <span class="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">{{ $item->total }} citas</span>
+                    <span class="font-medium text-gray-800 dark:text-gray-200">{{ $tutor->name ?? 'N/A' }}</span>
+                    <span class="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">{{ count($citasTutor) }} citas</span>
                 </div>
             @endforeach
-            @if($citasPorTutor->isEmpty())
+            @if($citas->isEmpty())
                 <p class="text-gray-500 dark:text-gray-400 text-center py-4">Sin datos</p>
             @endif
         </div>
@@ -71,23 +94,26 @@
             <i class="fas fa-book mr-2 text-indigo-600"></i>Citas por Materia
         </h2>
         <div class="space-y-2">
-            @foreach($citasPorMateria as $item)
+            @foreach($citas->groupBy('subject_id') as $subjectId => $citasMateria)
+                @php $materia = $citasMateria->first()->subject; @endphp
                 <div class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 dark:bg-gray-800/50 rounded-xl transition-all">
-                    <span class="font-medium text-gray-800 dark:text-gray-200">{{ $item->subject->nombre ?? 'N/A' }}</span>
-                    <span class="bg-purple-100 dark:bg-purple-900/50 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">{{ $item->total }} citas</span>
+                    <span class="font-medium text-gray-800 dark:text-gray-200">{{ $materia->nombre ?? 'N/A' }}</span>
+                    <span class="bg-purple-100 dark:bg-purple-900/50 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">{{ count($citasMateria) }} citas</span>
                 </div>
             @endforeach
-            @if($citasPorMateria->isEmpty())
+            @if($citas->isEmpty())
                 <p class="text-gray-500 dark:text-gray-400 text-center py-4">Sin datos</p>
             @endif
         </div>
     </div>
 </div>
+@endif
 
 <div class="card-hover glass-card rounded-xl shadow-md overflow-hidden">
     <div class="p-4 border-b border-gray-100 dark:border-gray-700 bg-gradient-to-r from-gray-50 dark:from-gray-800/50 to-indigo-50 dark:to-indigo-900/20">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center">
             <i class="fas fa-list mr-2 text-indigo-600"></i>Detalle de Citas
+            <span class="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">({{ $citas->count() }} registros)</span>
         </h2>
     </div>
     <div class="overflow-x-auto">
