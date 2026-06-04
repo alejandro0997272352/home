@@ -20,8 +20,8 @@ RUN composer install --optimize-autoloader --no-dev
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-COPY tutorias/nginx.conf /etc/nginx/nginx.conf
-COPY tutorias/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 8080
