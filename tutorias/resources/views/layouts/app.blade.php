@@ -15,8 +15,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
-        .will-change-transform { will-change: transform; }
-        .will-change-opacity { will-change: opacity; }
 
         .animate-fade-in { animation: fadeIn 0.5s ease-out both; }
         .animate-slide-up { animation: slideUp 0.5s ease-out both; }
@@ -33,23 +31,9 @@
         @keyframes skeleton-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
         @keyframes badge-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(234,179,8,0.5); } 50% { box-shadow: 0 0 0 6px rgba(234,179,8,0); } }
 
-        @keyframes icon-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-        @keyframes icon-float { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-4px) rotate(-3deg); } 75% { transform: translateY(-2px) rotate(3deg); } }
-        @keyframes icon-pulse-soft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        @keyframes icon-shimmer { 0% { filter: brightness(1); } 50% { filter: brightness(1.3); } 100% { filter: brightness(1); } }
-        @keyframes icon-spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes icon-wiggle { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(8deg); } 40% { transform: rotate(-6deg); } 60% { transform: rotate(4deg); } 80% { transform: rotate(-2deg); } }
-
-        .icon-bounce { animation: icon-bounce 2s ease-in-out infinite; }
-        .icon-float { animation: icon-float 3s ease-in-out infinite; }
-        .icon-pulse-soft { animation: icon-pulse-soft 2.5s ease-in-out infinite; }
-        .icon-shimmer { animation: icon-shimmer 3s ease-in-out infinite; }
-        .icon-spin-slow { animation: icon-spin-slow 4s linear infinite; }
-        .icon-wiggle { animation: icon-wiggle 1.5s ease-in-out infinite; animation-delay: var(--icon-delay, 0s); }
-        .icon-delay-1 { --icon-delay: 0.3s; }
-        .icon-delay-2 { --icon-delay: 0.6s; }
-        .icon-delay-3 { --icon-delay: 0.9s; }
-        .icon-delay-4 { --icon-delay: 1.2s; }
+        .icon-anim { transition: transform 0.3s ease, color 0.3s ease; display: inline-block; }
+        .icon-anim:hover { transform: scale(1.2); }
+        @media (prefers-reduced-motion: reduce) { .icon-anim { transition: none; } }
 
         .stagger-1 { animation-delay: 0.05s; }
         .stagger-2 { animation-delay: 0.1s; }
@@ -62,12 +46,9 @@
         .stagger-9 { animation-delay: 0.45s; }
         .stagger-10 { animation-delay: 0.5s; }
 
-        .btn-ripple { position: relative; overflow: hidden; }
-        .btn-ripple::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: rgba(255,255,255,0.3); transform: scale(0); opacity: 0; pointer-events: none; }
-        .btn-ripple:active::after { animation: ripple 0.6s ease-out; }
 
-        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 30px -10px rgba(79,70,229,0.2); }
+        .card-hover { transition: box-shadow 0.3s ease; }
+        .card-hover:hover { box-shadow: 0 8px 25px -8px rgba(79,70,229,0.15); }
 
         .nav-glass { background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(229,231,235,0.5); }
         .dark .nav-glass { background: rgba(15,23,42,0.9); border-bottom: 1px solid rgba(55,65,81,0.5); }
@@ -92,8 +73,8 @@
 
         .badge-pulse { animation: badge-pulse 2s ease-in-out infinite; }
 
-        .glass-card { background: rgba(255,255,255,0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.3); }
-        .dark .glass-card { background: rgba(15,23,42,0.75); border: 1px solid rgba(55,65,81,0.3); }
+        .glass-card { background: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.3); }
+        .dark .glass-card { background: rgba(15,23,42,0.85); border: 1px solid rgba(55,65,81,0.3); }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }

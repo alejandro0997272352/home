@@ -24,7 +24,7 @@
                 </p>
             </div>
             <div class="bg-gradient-to-br from-indigo-100 to-indigo-200 p-3 rounded-xl">
-                <i class="fas fa-users text-2xl text-indigo-600 icon-float"></i>
+                <i class="fas fa-users text-2xl text-indigo-600 icon-anim"></i>
             </div>
         </div>
         <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">
@@ -42,7 +42,7 @@
                 </p>
             </div>
             <div class="bg-gradient-to-br from-yellow-100 to-amber-200 p-3 rounded-xl">
-                <i class="fas fa-calendar text-2xl text-yellow-600 icon-pulse-soft icon-delay-1"></i>
+                <i class="fas fa-calendar text-2xl text-yellow-600 icon-anim"></i>
             </div>
         </div>
         <div class="mt-3 flex gap-3 text-xs text-gray-500 dark:text-gray-400">
@@ -60,7 +60,7 @@
                 </p>
             </div>
             <div class="bg-gradient-to-br from-purple-100 to-purple-200 p-3 rounded-xl">
-                <i class="fas fa-book text-2xl text-purple-600 icon-bounce icon-delay-2"></i>
+                <i class="fas fa-book text-2xl text-purple-600 icon-anim"></i>
             </div>
         </div>
         <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">Materias registradas en el sistema</div>
@@ -74,7 +74,7 @@
                 </p>
             </div>
             <div class="bg-gradient-to-br from-pink-100 to-pink-200 p-3 rounded-xl">
-                <i class="fas fa-calendar-day text-2xl text-pink-600 icon-wiggle icon-delay-3"></i>
+                <i class="fas fa-calendar-day text-2xl text-pink-600 icon-anim"></i>
             </div>
         </div>
         <div class="mt-3 text-xs text-gray-500 dark:text-gray-400">Citas programadas para hoy</div>
@@ -84,19 +84,19 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-5">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-users mr-2 text-indigo-600 icon-float"></i>Usuarios por Rol
+            <i class="fas fa-users mr-2 text-indigo-600 icon-anim"></i>Usuarios por Rol
         </h2>
         <canvas id="usuariosChart" height="200"></canvas>
     </div>
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-6">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-chart-pie mr-2 text-yellow-500 icon-pulse-soft"></i>Estado de Citas
+            <i class="fas fa-chart-pie mr-2 text-yellow-500 icon-anim"></i>Estado de Citas
         </h2>
         <canvas id="citasChart" height="200"></canvas>
     </div>
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-7">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-trophy mr-2 text-yellow-500 icon-bounce"></i>Top 5 Tutores
+            <i class="fas fa-trophy mr-2 text-yellow-500 icon-anim"></i>Top 5 Tutores
         </h2>
         <div class="space-y-3">
             @forelse($tutoresTop as $index => $tutor)
@@ -123,13 +123,13 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-8">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-chart-line mr-2 text-indigo-600 icon-shimmer"></i>Citas por Mes ({{ now()->year }})
+            <i class="fas fa-chart-line mr-2 text-indigo-600 icon-anim"></i>Citas por Mes ({{ now()->year }})
         </h2>
         <canvas id="citasMesChart" height="220"></canvas>
     </div>
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-9">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-calendar-week mr-2 text-purple-600 icon-wiggle"></i>Citas Últimos 14 Días
+            <i class="fas fa-calendar-week mr-2 text-purple-600 icon-anim"></i>Citas Últimos 14 Días
         </h2>
         <canvas id="citasDiaChart" height="220"></canvas>
     </div>
@@ -137,7 +137,7 @@
 
 <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-10">
     <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-clock mr-2 text-blue-600 icon-spin-slow"></i>Citas Recientes
+            <i class="fas fa-clock mr-2 text-blue-600 icon-anim"></i>Citas Recientes
     </h2>
     <div class="overflow-x-auto">
         <table class="w-full text-sm">

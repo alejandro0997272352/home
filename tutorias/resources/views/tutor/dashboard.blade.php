@@ -30,14 +30,7 @@
                     </p>
                 </div>
                 <div class="bg-gradient-to-br from-{{ $card['color'] }}-100 to-{{ $card['color'] }}-200 p-3 rounded-xl">
-                    <i class="fas {{ $card['icon'] }} text-2xl text-{{ $card['color'] }}-600
-                        @switch($i)
-                            @case(0) icon-float @break
-                            @case(1) icon-pulse-soft @break
-                            @case(2) icon-bounce @break
-                            @case(3) icon-wiggle @break
-                            @case(4) icon-shimmer @break
-                        @endswitch"></i>
+                    <i class="fas {{ $card['icon'] }} text-2xl text-{{ $card['color'] }}-600 icon-anim"></i>
                 </div>
             </div>
         </div>
@@ -47,19 +40,19 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-5">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-chart-bar mr-2 text-blue-600 icon-float"></i>Citas por Mes
+            <i class="fas fa-chart-bar mr-2 text-blue-600 icon-anim"></i>Citas por Mes
         </h2>
         <canvas id="chartMes" height="180"></canvas>
     </div>
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-6">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-chart-pie mr-2 text-blue-600 icon-pulse-soft"></i>Por Estado
+            <i class="fas fa-chart-pie mr-2 text-blue-600 icon-anim"></i>Por Estado
         </h2>
         <canvas id="chartEstado" height="180"></canvas>
     </div>
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-7">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-clock mr-2 text-blue-600 icon-spin-slow"></i>Próximas Citas
+            <i class="fas fa-clock mr-2 text-blue-600 icon-anim"></i>Próximas Citas
         </h2>
         @if($proximasCitas->isNotEmpty())
             <div class="space-y-2">
@@ -91,7 +84,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-8">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-book mr-2 text-blue-600 icon-bounce"></i>Mis Materias
+            <i class="fas fa-book mr-2 text-blue-600 icon-anim"></i>Mis Materias
         </h2>
         @if($materias->isNotEmpty())
             <div class="flex flex-wrap gap-2">
@@ -105,7 +98,7 @@
     </div>
     <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-9">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <i class="fas fa-chart-line mr-2 text-blue-600 icon-shimmer"></i>Resumen
+            <i class="fas fa-chart-line mr-2 text-blue-600 icon-anim"></i>Resumen
         </h2>
         <div class="grid grid-cols-2 gap-4">
             <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 text-center">
