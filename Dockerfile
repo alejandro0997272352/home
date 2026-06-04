@@ -5,11 +5,12 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libonig-dev \
     libxml2-dev \
+    libgd-dev \
     zip \
     unzip \
     git \
     curl \
-    && docker-php-ext-install pdo_pgsql mbstring xml bcmath
+    && docker-php-ext-install pdo_pgsql mbstring xml bcmath gd
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
