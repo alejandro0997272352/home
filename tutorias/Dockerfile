@@ -13,15 +13,15 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY . /var/www/html
+COPY tutorias/ /var/www/html
 WORKDIR /var/www/html
 
 RUN composer install --optimize-autoloader --no-dev
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY tutorias/nginx.conf /etc/nginx/nginx.conf
+COPY tutorias/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 8080

@@ -2,10 +2,9 @@ services:
   - type: web
     name: tutorias
     runtime: docker
-    rootDir: tutorias
     region: oregon
     plan: free
-    dockerfilePath: /Dockerfile
+    dockerfilePath: /tutorias/Dockerfile
     healthCheckPath: /health
     envVars:
       - key: APP_ENV
