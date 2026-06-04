@@ -6,13 +6,17 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Tutorías Académicas') - {{ config('app.name') }}</title>
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+        .will-change-transform { will-change: transform; }
+        .will-change-opacity { will-change: opacity; }
 
         .animate-fade-in { animation: fadeIn 0.5s ease-out both; }
         .animate-slide-up { animation: slideUp 0.5s ease-out both; }
@@ -85,7 +89,7 @@
     </script>
     @stack('styles')
 </head>
-<body class="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen transition-colors duration-200 animate-fade-in">
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200">
 
     @auth
         <nav class="nav-glass shadow-sm sticky top-0 z-50">
@@ -289,7 +293,9 @@
         document.addEventListener('DOMContentLoaded', function () {
             if (document.querySelector('[x-data]')) {
                 fetchNotifs();
-                setInterval(fetchNotifs, 30000);
+                setInterval(function () {
+                    if (!document.hidden) fetchNotifs();
+                }, 60000);
             }
 
             document.querySelectorAll('.toast-data').forEach(el => {
