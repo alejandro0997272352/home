@@ -13,6 +13,16 @@ class ActivityLogController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(30);
 
+        if (request()->wantsJson()) {
+            $html = view('admin.partials.activity-table', compact('logs'))->render();
+            return response()->json([
+                'html' => $html,
+                'total' => $logs->total(),
+                'page' => $logs->currentPage(),
+                'pages' => $logs->lastPage(),
+            ]);
+        }
+
         return view('admin.actividad', compact('logs'));
     }
 }

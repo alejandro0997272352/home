@@ -26,6 +26,16 @@ class SubjectController extends Controller
         $materias = $query->orderBy('nombre')->paginate(15);
         $areas = Subject::select('area')->whereNotNull('area')->distinct()->pluck('area');
 
+        if ($request->wantsJson()) {
+            $html = view('admin.materias.partials.table', compact('materias'))->render();
+            return response()->json([
+                'html' => $html,
+                'total' => $materias->total(),
+                'page' => $materias->currentPage(),
+                'pages' => $materias->lastPage(),
+            ]);
+        }
+
         return view('admin.materias.index', compact('materias', 'areas'));
     }
 

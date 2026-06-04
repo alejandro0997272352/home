@@ -24,6 +24,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
@@ -124,6 +125,12 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/locale/{locale}', [LocaleController::class, 'switch'])->name('locale.switch');
+
+    Route::post('/payments/checkout/{appointment}', [PaymentController::class, 'checkout'])->name('payments.checkout');
+    Route::get('/payments/success/{appointment}', [PaymentController::class, 'success'])->name('payments.success');
+    Route::get('/payments/cancel/{appointment}', [PaymentController::class, 'cancel'])->name('payments.cancel');
+
+    Route::post('/stripe/webhook', [PaymentController::class, 'webhook'])->name('stripe.webhook')->withoutMiddleware(['auth', \App\Http\Middleware\VerifyCsrfToken::class]);
 
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/{conversation}', [ChatController::class, 'show'])->name('chat.show');

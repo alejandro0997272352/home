@@ -142,6 +142,12 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 text-center">
+                            @php $payment = $cita->payment; @endphp
+                            @if($payment && $payment->status === 'paid')
+                                <span class="inline-block px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700 font-medium mr-1" title="Pagado">
+                                    <i class="fas fa-check-circle mr-0.5"></i> Pagado
+                                </span>
+                            @endif
                             @if($cita->estado === 'pendiente')
                                 <form method="POST" action="{{ route('tutor.citas.confirmar', $cita) }}" class="inline">
                                     @csrf @method('PATCH')

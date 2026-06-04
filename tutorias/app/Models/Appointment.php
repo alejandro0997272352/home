@@ -82,6 +82,11 @@ class Appointment extends Model
         return $query->where('student_id', $studentId);
     }
 
+    public function payment()
+    {
+        return $this->hasOne(\App\Models\Payment::class);
+    }
+
     public function scopeFechaBetween($query, $start, $end)
     {
         return $query->whereBetween('fecha', [$start, $end]);

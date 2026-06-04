@@ -14,7 +14,7 @@ class AppointmentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Appointment::with(['student', 'subject'])
+        $query = Appointment::with(['student', 'subject', 'payment'])
             ->byTutor(auth()->id());
 
         if ($request->filled('estado')) {

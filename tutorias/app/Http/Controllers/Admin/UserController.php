@@ -28,6 +28,17 @@ class UserController extends Controller
         }
 
         $usuarios = $query->orderBy('created_at', 'desc')->paginate(15);
+
+        if ($request->wantsJson()) {
+            $html = view('admin.usuarios.partials.table', compact('usuarios'))->render();
+            return response()->json([
+                'html' => $html,
+                'total' => $usuarios->total(),
+                'page' => $usuarios->currentPage(),
+                'pages' => $usuarios->lastPage(),
+            ]);
+        }
+
         return view('admin.usuarios.index', compact('usuarios'));
     }
 

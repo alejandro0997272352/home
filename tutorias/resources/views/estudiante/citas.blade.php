@@ -144,6 +144,17 @@
                         </td>
                         <td class="px-6 py-4 text-center">
                             @if(in_array($cita->estado, ['pendiente', 'confirmada']))
+                                @php $payment = $cita->payment; @endphp
+                                @if($payment && $payment->status === 'paid')
+                                    <span class="text-green-600 text-xs font-medium mr-2" title="Pagado"><i class="fas fa-check-circle"></i></span>
+                                @elseif($cita->tutor->tutorProfile?->tarifa_por_hora > 0)
+                                    <form method="POST" action="{{ route('payments.checkout', $cita) }}" class="inline">
+                                        @csrf
+                                        <button type="submit" class="text-green-600 hover:text-green-900 mx-1 hover:scale-110 inline-block transition-transform" title="Pagar (${{ number_format($cita->tutor->tutorProfile->tarifa_por_hora, 2) }})">
+                                            <i class="fas fa-credit-card"></i>
+                                        </button>
+                                    </form>
+                                @endif
                                 <button onclick="showCancelModal({{ $cita->id }})" class="text-red-600 hover:text-red-900 hover:scale-110 inline-block transition-transform" title="Cancelar">
                                     <i class="fas fa-times-circle"></i>
                                 </button>
