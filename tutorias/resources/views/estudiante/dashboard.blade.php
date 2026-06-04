@@ -29,7 +29,13 @@
                     </p>
                 </div>
                 <div class="bg-gradient-to-br from-{{ $card['color'] }}-100 to-{{ $card['color'] }}-200 p-3 rounded-xl">
-                    <i class="fas {{ $card['icon'] }} text-2xl text-{{ $card['color'] }}-600"></i>
+                    <i class="fas {{ $card['icon'] }} text-2xl text-{{ $card['color'] }}-600
+                        @switch($i)
+                            @case(0) icon-float @break
+                            @case(1) icon-bounce @break
+                            @case(2) icon-pulse-soft @break
+                            @case(3) icon-wiggle @break
+                        @endswitch"></i>
                 </div>
             </div>
         </div>
@@ -38,7 +44,7 @@
 
 <div class="card-hover glass-card rounded-xl shadow-md p-6 animate-slide-up stagger-5">
     <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-        <i class="fas fa-clock mr-2 text-green-600"></i>Próximas Citas
+        <i class="fas fa-clock mr-2 text-green-600 icon-spin-slow"></i>Próximas Citas
     </h2>
     @if($proximasCitas->isNotEmpty())
         <div class="space-y-3">

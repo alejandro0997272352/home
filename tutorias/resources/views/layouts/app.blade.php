@@ -33,6 +33,24 @@
         @keyframes skeleton-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
         @keyframes badge-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(234,179,8,0.5); } 50% { box-shadow: 0 0 0 6px rgba(234,179,8,0); } }
 
+        @keyframes icon-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        @keyframes icon-float { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-4px) rotate(-3deg); } 75% { transform: translateY(-2px) rotate(3deg); } }
+        @keyframes icon-pulse-soft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes icon-shimmer { 0% { filter: brightness(1); } 50% { filter: brightness(1.3); } 100% { filter: brightness(1); } }
+        @keyframes icon-spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes icon-wiggle { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(8deg); } 40% { transform: rotate(-6deg); } 60% { transform: rotate(4deg); } 80% { transform: rotate(-2deg); } }
+
+        .icon-bounce { animation: icon-bounce 2s ease-in-out infinite; }
+        .icon-float { animation: icon-float 3s ease-in-out infinite; }
+        .icon-pulse-soft { animation: icon-pulse-soft 2.5s ease-in-out infinite; }
+        .icon-shimmer { animation: icon-shimmer 3s ease-in-out infinite; }
+        .icon-spin-slow { animation: icon-spin-slow 4s linear infinite; }
+        .icon-wiggle { animation: icon-wiggle 1.5s ease-in-out infinite; animation-delay: var(--icon-delay, 0s); }
+        .icon-delay-1 { --icon-delay: 0.3s; }
+        .icon-delay-2 { --icon-delay: 0.6s; }
+        .icon-delay-3 { --icon-delay: 0.9s; }
+        .icon-delay-4 { --icon-delay: 1.2s; }
+
         .stagger-1 { animation-delay: 0.05s; }
         .stagger-2 { animation-delay: 0.1s; }
         .stagger-3 { animation-delay: 0.15s; }
